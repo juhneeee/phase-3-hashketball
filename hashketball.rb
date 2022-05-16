@@ -126,4 +126,87 @@ def game_hash
   }
 end
 
+def game_hash2 
+  {test: 'value1', apple: 'value2', banana:'value3'}
+end
 # Write code here
+
+def num_points_scored(name)
+  player_stats(name)[:points]
+end
+
+# given an player name, return their stats.
+# if game_hash[:home or :away][players][0..4][player_name] == name
+def player_stats(name)
+  game_hash.each do |side,value|
+    game_hash[side][:players].each do |obj|
+      if(obj[:player_name] == name)
+        return obj
+      end
+    end
+  end
+end
+
+def shoe_size(name)
+  player_stats(name)[:shoe]
+end
+
+def team_colors(name)
+  game_hash.each_value do |value|
+    if value[:team_name] == name
+      return value[:colors]
+    end
+  end
+end
+
+def team_names
+  game_hash.each_value.map {|obj| obj[:team_name]}
+end
+
+def player_numbers(name)
+  game_hash.each_value do |hash|
+    if hash[:team_name] == name
+      return hash[:players].map {|eachPlayer| eachPlayer[:number]}
+    end
+  end
+end
+
+def big_shoe_rebounds
+  current = 0
+  num_rebounds = 0
+  game_hash.each_value do |hash|
+    hash[:players].each do |eachPlayer|
+      # pp eachPlayer
+      if (eachPlayer[:shoe] > current)
+        current = eachPlayer[:shoe]
+        num_rebounds = eachPlayer[:rebounds]
+      end
+    end
+  end
+  num_rebounds
+end
+
+def winning_team
+  points_amount = 0
+  leading_team = ''
+  game_hash.each_value do |hash|
+    team_score = hash[players].reduce(0) {|sum, player| sum + player[:points]}
+    if team_score > points_amount
+      points_amount = team_score
+      leading_team = hash[:team_name]
+    end
+  end
+  return leading_team
+end
+
+def player_stats2(name)
+  game_hash2.each do |side|
+    puts side
+  end
+end
+
+# puts player_stats('Alan Anderson')
+# p team_names
+# p team_colors('Brooklyn Nets')
+# p player_numbers('Brooklyn Nets')
+puts big_shoe_rebounds
